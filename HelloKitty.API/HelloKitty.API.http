@@ -1,0 +1,6 @@
+@HelloKitty.API_HostAddress = http://localhost:5286
+
+GET {{HelloKitty.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
