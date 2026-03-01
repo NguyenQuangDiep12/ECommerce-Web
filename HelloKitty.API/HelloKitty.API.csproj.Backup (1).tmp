@@ -8,13 +8,22 @@
 
   <ItemGroup>
     <Compile Remove="Configuration\**" />
+    <Compile Remove="Domain\Orders\Interfaces\**" />
     <Content Remove="Configuration\**" />
+    <Content Remove="Domain\Orders\Interfaces\**" />
     <EmbeddedResource Remove="Configuration\**" />
+    <EmbeddedResource Remove="Domain\Orders\Interfaces\**" />
     <None Remove="Configuration\**" />
+    <None Remove="Domain\Orders\Interfaces\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
