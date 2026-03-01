@@ -1,4 +1,4 @@
-﻿using HelloKitty.API.Domain.Logging.Entities;
+﻿using HelloKitty.Domain.Logging.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

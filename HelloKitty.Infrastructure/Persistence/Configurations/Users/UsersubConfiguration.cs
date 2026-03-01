@@ -1,4 +1,4 @@
-﻿using HelloKitty.API.Domain.Users.Entities;
+﻿using HelloKitty.Domain.Users.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -117,7 +117,7 @@ namespace HelloKitty.Infrastructure.Persistence.Configurations.Users
             public void Configure(EntityTypeBuilder<OAuthAccount> builder)
             {
                 builder.ToTable("OAuthAccounts");
-                builder.HasKey(o => o.UserId);
+                builder.HasKey(o => o.OAuthAccountId);
 
                 builder.Property(o => o.ProviderUserId)
                     .HasMaxLength(255)

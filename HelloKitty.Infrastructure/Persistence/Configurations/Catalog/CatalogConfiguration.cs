@@ -1,13 +1,13 @@
-﻿using HelloKitty.API.Domain.Catalog.Entities;
-using HelloKitty.API.Domain.Catalog.Enums;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Attribute = HelloKitty.API.Domain.Catalog.Entities.Attribute;
+using Attribute = HelloKitty.Domain.Catalog.Entities.Attribute;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HelloKitty.Domain.Catalog.Entities;
+using HelloKitty.Domain.Catalog.Enums;
 
 namespace HelloKitty.Infrastructure.Persistence.Configurations.Catalog
 {
