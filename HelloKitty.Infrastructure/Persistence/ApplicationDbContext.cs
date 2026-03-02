@@ -1,13 +1,13 @@
-﻿using HelloKitty.API.Domain.Carts.Entities;
-using HelloKitty.API.Domain.Catalog.Entities;
-using HelloKitty.API.Domain.Inventory.Entities;
-using HelloKitty.API.Domain.Logging.Entities;
-using HelloKitty.API.Domain.Orders.Entities;
-using HelloKitty.API.Domain.Promotions.Entities;
-using HelloKitty.API.Domain.Users.Entities;
+﻿using HelloKitty.Domain.Carts.Entities;
+using HelloKitty.Domain.Catalog.Entities;
+using HelloKitty.Domain.Inventory.Entities;
+using HelloKitty.Domain.Logging.Entities;
+using HelloKitty.Domain.Orders.Entities;
+using HelloKitty.Domain.Promotions.Entities;
+using HelloKitty.Domain.Users.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using Attribute = HelloKitty.API.Domain.Catalog.Entities.Attribute;
+using Attribute = HelloKitty.Domain.Catalog.Entities.Attribute;
 
 namespace HelloKitty.Infrastructure.Persistence
 {

@@ -1,4 +1,4 @@
-﻿using HelloKitty.API.Domain.Promotions.Entities;
+﻿using HelloKitty.Domain.Promotions.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

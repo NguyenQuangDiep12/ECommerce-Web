@@ -1,4 +1,4 @@
-﻿using HelloKitty.API.Domain.Carts.Entities;
+﻿using HelloKitty.Domain.Carts.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

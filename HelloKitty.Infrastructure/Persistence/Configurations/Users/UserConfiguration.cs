@@ -1,5 +1,5 @@
-﻿using HelloKitty.API.Domain.Users.Entities;
-using HelloKitty.API.Domain.Users.Enums;
+﻿using HelloKitty.Domain.Users.Entities;
+using HelloKitty.Domain.Users.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;

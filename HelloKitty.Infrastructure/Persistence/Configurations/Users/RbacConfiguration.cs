@@ -1,4 +1,4 @@
-﻿using HelloKitty.API.Domain.Users.Entities;
+﻿using HelloKitty.Domain.Users.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
