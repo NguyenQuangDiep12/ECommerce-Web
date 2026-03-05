@@ -1,6 +1,26 @@
+# Build results
 bin/
 obj/
-.vs/
+
+# User-specific files
 *.user
 *.suo
-appsettings.Development.json
+*.userosscache
+*.sln.docstates
+
+# Visual Studio
+.vs/
+
+# ASP.NET Core
+appsettings.json
+
+# Logs
+*.log
+
+# NuGet packages
+*.nupkg
+packages/
+
+# Temporary files
+*.tmp
+*.temp

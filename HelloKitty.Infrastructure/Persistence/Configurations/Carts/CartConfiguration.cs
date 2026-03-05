@@ -33,23 +33,4 @@ namespace HelloKitty.Infrastructure.Persistence.Configurations.Carts
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }
-
-    public class CartItemConfiguration : IEntityTypeConfiguration<CartItem>
-    {
-        public void Configure(EntityTypeBuilder<CartItem> builder)
-        {
-            builder.ToTable("CartItems");
-            builder.HasKey(i => i.CartItemId);
-
-            // Không được thêm trùng variant trong cùng 1 cart
-            builder.HasIndex(i => new { i.CartId, i.VariantId }).IsUnique();
-
-            builder.Property(i => i.Quantity).IsRequired();
-
-            builder.HasOne(i => i.ProductVariant)
-                .WithMany(v => v.CartItems  )
-                .HasForeignKey(i => i.VariantId)
-                .OnDelete(DeleteBehavior.Restrict);
-        }
-    }
 }
