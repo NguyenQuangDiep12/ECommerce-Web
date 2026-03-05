@@ -8,7 +8,7 @@ namespace HelloKitty.Domain.Carts.Entities
         public Guid CartId { get; private set; }
         public Cart Cart { get; set; } = null!;
         public int Quantity { get; set; }
-        public DateTime PriceAtTime { get; set; }
+        public decimal PriceAtTime { get; set; }
         public Guid VariantId { get; set; }
         public ProductVariant ProductVariant { get; set; } = null!;
     }
