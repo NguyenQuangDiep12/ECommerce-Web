@@ -25,5 +25,6 @@ namespace HelloKitty.Domain.Users.Entities
         public List<Order>? Orders { get; set; } = new List<Order>();
         public List<Review>? Reviews { get; set; } = new List<Review>();
         public List<UserRole>? UserRoles { get; set; } = new List<UserRole>();
+        public List<RefreshToken>? RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }
