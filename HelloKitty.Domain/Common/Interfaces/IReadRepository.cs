@@ -13,9 +13,11 @@ namespace HelloKitty.Domain.Common.Interfaces
     public interface IReadRepository<TEntity,TKey> where TEntity : class
     {
         Task<TEntity?> GetByIdAsync(TKey id, CancellationToken ct = default);
+        [Obsolete("Method is deprecated")]
         Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken ct = default);
-        Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken ct = default);
-        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>>, CancellationToken ct = default);
+        Task<PagedResult<TEntity>> GetPagedAsync(int page, int pageSize, CancellationToken ct = default);
+        Task<IReadOnlyList<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken ct = default);
+        Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken ct = default);
         Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken ct = default);
     }
 }

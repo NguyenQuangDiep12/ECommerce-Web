@@ -2,7 +2,7 @@
 {
     public class UserCredential
     {
-        public Guid UserId { get; private set; }
+        public Guid UserId { get;  set; }
         public string PasswordHash { get; set; } = string.Empty;
         public DateTime PasswordUpdatedAt { get; set; }
         public int FailedLoginCount { get; set; } = 0;

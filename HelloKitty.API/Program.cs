@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using HelloKitty.Infrastructure.Persistence;
+using HelloKitty.Infrastructure.Persistences;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +9,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
+
 
 var app = builder.Build();
 
@@ -21,6 +23,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
