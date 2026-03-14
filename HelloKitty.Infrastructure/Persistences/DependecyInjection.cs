@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using HelloKitty.Domain.Common.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using HelloKitty.Domain.Logging.Interfaces;
+using HelloKitty.Domain.Inventory.Interfaces;
 
 namespace HelloKitty.Infrastructure.Persistences
 {
@@ -34,6 +36,9 @@ namespace HelloKitty.Infrastructure.Persistences
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserCredentialRepository, UserCredentialRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+            services.AddScoped<ISystemLogRepository, SystemLogRepository>();
+            services.AddScoped<IInventoryLogRepository, InventoryLogRepository>();
 
             // unit of work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -52,20 +57,15 @@ namespace HelloKitty.Infrastructure.Persistences
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = configurations["Issuer"],
-                        ValidAudience = configurations["Audience"],
+                        ValidIssuer = configurations["Jwt:Issuer"],
+                        ValidAudience = configurations["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(configurations["SecretKey"]!)),
+                            Encoding.UTF8.GetBytes(configurations["Jwt:SecretKey"]!)),
                         ClockSkew = TimeSpan.Zero
                     };
                 });
 
             return services;
-        }
-
-        public static IServiceCollection AddApplication(this IServiceCollection services)
-        {
-            services.AddValidatorsFromAssembly
         }
     }
 }

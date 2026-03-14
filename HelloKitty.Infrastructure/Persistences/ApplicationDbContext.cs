@@ -64,10 +64,17 @@ namespace HelloKitty.Infrastructure.Persistences
         // Logging
         public DbSet<AuditLog> auditLogs { get; set; }
         public DbSet<SystemLog> systemLogs { get; set; }
+
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            configurationBuilder.Properties<decimal>()
+                .HavePrecision(18, 2);
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
     }
 }

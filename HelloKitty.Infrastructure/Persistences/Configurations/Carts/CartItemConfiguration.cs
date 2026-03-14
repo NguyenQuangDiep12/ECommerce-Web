@@ -20,6 +20,9 @@ namespace HelloKitty.Infrastructure.Persistences.Configurations.Carts
             builder.HasIndex(i => new { i.CartId, i.VariantId }).IsUnique();
 
             builder.Property(i => i.Quantity).IsRequired();
+            builder.Property(i => i.PriceAtTime)
+                .HasColumnType("decimal(18,2)")
+                .IsRequired();
 
             builder.HasOne(i => i.ProductVariant)
                 .WithMany(v => v.CartItems)
