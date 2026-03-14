@@ -26,7 +26,7 @@ namespace HelloKitty.Infrastructure.Persistences.Configurations.Users
             builder.Property(t => t.CreatedById).HasMaxLength(45);
 
             builder.HasOne(t => t.User)
-                .WithMany()
+                .WithMany(u => u.RefreshTokens)
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

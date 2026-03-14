@@ -1,5 +1,6 @@
 ﻿using HelloKitty.Application.Features.Auth.DTOs;
 using HelloKitty.Application.Features.Auth.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HelloKitty.API.Controllers
@@ -72,6 +73,8 @@ namespace HelloKitty.API.Controllers
             return Unauthorized(new { message = result.Error });
         }
 
+        [HttpPost("logout")]
+        [Authorize]
         public async Task<IActionResult> Logout([FromBody] string refreshToken, CancellationToken ct)
         {
             await _authService.LogoutAsync(refreshToken, ct);
