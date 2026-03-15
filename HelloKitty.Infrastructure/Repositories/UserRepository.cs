@@ -68,7 +68,7 @@ namespace HelloKitty.Infrastructure.Repositories
         {
             return await _dbContext.Users
                 .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Email == email);
+                .FirstOrDefaultAsync(x => x.Email == email, ct);
         }
 
         public async Task<User?> GetByIdAsync(Guid id, CancellationToken ct = default)

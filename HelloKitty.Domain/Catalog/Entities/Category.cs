@@ -10,6 +10,8 @@ namespace HelloKitty.Domain.Catalog.Entities
         public List<Category> Children { get; set; } = new List<Category>();
         public string Slug { get; set; } = null!;
         public bool IsActive { get; set; } = true;
+        public DateTime? UpdatedAt { get; set; }
+        public bool IsDeleted { get; set; }
         public DateTime CreatedAt { get; private set; }
         public List<Product> Products { get; set; } = new List<Product>();
     }
