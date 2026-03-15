@@ -1,6 +1,10 @@
-﻿using HelloKitty.Domain.Common.Interfaces;
+﻿using HelloKitty.Domain.Carts.Interfaces;
+using HelloKitty.Domain.Catalog.Interfaces;
+using HelloKitty.Domain.Common.Interfaces;
 using HelloKitty.Domain.Inventory.Interfaces;
 using HelloKitty.Domain.Logging.Interfaces;
+using HelloKitty.Domain.Orders.Interfaces;
+using HelloKitty.Domain.Promotions.Interfaces;
 using HelloKitty.Domain.Users.Interfaces;
 using HelloKitty.Infrastructure.Repositories;
 using System;
@@ -26,6 +30,19 @@ namespace HelloKitty.Infrastructure.Persistences
         public ISystemLogRepository SystemLogs { get; }
 
         public IInventoryLogRepository InventoriesLogs { get; }
+
+        public ICategoryRepository Categories => throw new NotImplementedException();
+
+        public IProductRepository Products => throw new NotImplementedException();
+
+        public IReviewRepository Reviews => throw new NotImplementedException();
+
+        public ICartRepository Carts => throw new NotImplementedException();
+
+        public IOrderRepository Orders => throw new NotImplementedException();
+
+        public IVoucherRepository Vouchers => throw new NotImplementedException();
+
         public UnitOfWork(
             ApplicationDbContext dbContext,
             IUserRepository userRepository,
