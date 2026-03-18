@@ -34,5 +34,9 @@ namespace HelloKitty.Domain.Common.Interfaces
         IInventoryLogRepository InventoriesLogs { get; }
 
         Task<int> SaveChangesAsync(CancellationToken ct = default);
+
+        Task BeginTransactionAsync();
+        Task CommitAsync();
+        Task RollbackAsync();
     }
 }

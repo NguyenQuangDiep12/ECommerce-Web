@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelloKitty.Domain.Common.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HelloKitty.Domain.Promotions.Interfaces
 {
-    public interface IVoucherRepository
+    public interface IVoucherRepository : IWriteRepository<Voucher>
     {
         Task AddAsync(Voucher voucher, CancellationToken ct = default);
         Task<Voucher?> GetByIdAsync(Guid id, CancellationToken ct = default);
