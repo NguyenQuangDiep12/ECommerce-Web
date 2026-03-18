@@ -1,20 +1,24 @@
-﻿using HelloKitty.Domain.Users.Interfaces;
+﻿using HelloKitty.Domain.Carts.Interfaces;
+using HelloKitty.Domain.Catalog.Interfaces;
+using HelloKitty.Domain.Common.Interfaces;
+using HelloKitty.Domain.Inventory.Interfaces;
+using HelloKitty.Domain.Logging.Interfaces;
+using HelloKitty.Domain.Orders.Interfaces;
+using HelloKitty.Domain.Promotions.Interfaces;
+using HelloKitty.Domain.Users.Interfaces;
+using HelloKitty.Infrastructure.Repositories;
+using HelloKitty.Infrastructure.Services;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using HelloKitty.Infrastructure.Repositories;
-using HelloKitty.Infrastructure.Services;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HelloKitty.Domain.Common.Interfaces;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using HelloKitty.Domain.Logging.Interfaces;
-using HelloKitty.Domain.Inventory.Interfaces;
 
 namespace HelloKitty.Infrastructure.Persistences
 {
@@ -27,7 +31,7 @@ namespace HelloKitty.Infrastructure.Persistences
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                        configurations.GetConnectionString("DefaultConnection"),
+                        configurations.GetConnectionString("TMDT"), // use user-secrets key connectionstrings
                         b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
                 )
             );
@@ -39,6 +43,12 @@ namespace HelloKitty.Infrastructure.Persistences
             services.AddScoped<IAuditLogRepository, AuditLogRepository>();
             services.AddScoped<ISystemLogRepository, SystemLogRepository>();
             services.AddScoped<IInventoryLogRepository, InventoryLogRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IVoucherRepository, VoucherRepository>();
 
             // unit of work
             services.AddScoped<IUnitOfWork, UnitOfWork>();

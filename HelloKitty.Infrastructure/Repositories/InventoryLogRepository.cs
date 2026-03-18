@@ -20,17 +20,17 @@ namespace HelloKitty.Infrastructure.Repositories
 
         public async Task AddAsync(InventoryLog entity, CancellationToken ct = default)
         {
-            await _dbContext.inventoryLogs.AddAsync(entity, ct);
+            await _dbContext.InventoryLogs.AddAsync(entity, ct);
         }
 
         public async Task AddRangeAsync(IEnumerable<InventoryLog> entities, CancellationToken ct = default)
         {
-            await _dbContext.inventoryLogs.AddRangeAsync(entities, ct);
+            await _dbContext.InventoryLogs.AddRangeAsync(entities, ct);
         }
 
         public async Task<IEnumerable<InventoryLog>> GetByVariantIdAsync(Guid variantId, CancellationToken ct = default)
         {
-            return await _dbContext.inventoryLogs
+            return await _dbContext.InventoryLogs
                                 .AsNoTracking()
                                 .Where(l => l.VariantId == variantId)
                                 .OrderByDescending(l => l.CreatedAt)

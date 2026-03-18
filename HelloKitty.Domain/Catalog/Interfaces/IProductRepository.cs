@@ -1,5 +1,6 @@
 ﻿using HelloKitty.Domain.Catalog.Entities;
 using HelloKitty.Domain.Common;
+using HelloKitty.Domain.Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HelloKitty.Domain.Catalog.Interfaces
 {
-    public interface IProductRepository
+    public interface IProductRepository : IWriteRepository<Product>
     {
         Task AddAsync(Product product, CancellationToken ct = default);
         Task<Product?> GetByIdAsync(Guid id, CancellationToken ct = default);
@@ -17,6 +18,5 @@ namespace HelloKitty.Domain.Catalog.Interfaces
             int page, int pageSize,
             Guid? categoryId, string? search,
             CancellationToken ct = default);
-        Task Update(Product product, CancellationToken ct = default);
     }
 }
