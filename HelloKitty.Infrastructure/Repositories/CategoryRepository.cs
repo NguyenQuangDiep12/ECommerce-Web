@@ -15,6 +15,10 @@ namespace HelloKitty.Infrastructure.Repositories
     public class CategoryRepository : ICategoryRepository
     {
         private readonly ApplicationDbContext _dbContext;
+        public CategoryRepository(ApplicationDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
 
         public async Task<Category?> GetByIdAsync(Guid id, CancellationToken ct = default)
         {
