@@ -23,17 +23,17 @@ namespace HelloKitty.Infrastructure.Repositories
 
         public async Task AddAsync(SystemLog entity, CancellationToken ct = default)
         {
-            await _dbContext.systemLogs.AddAsync(entity, ct);
+            await _dbContext.SystemLogs.AddAsync(entity, ct);
         }
 
         public async Task AddRangeAsync(IEnumerable<SystemLog> entities, CancellationToken ct = default)
         {
-            await _dbContext.systemLogs.AddRangeAsync(entities, ct);
+            await _dbContext.SystemLogs.AddRangeAsync(entities, ct);
         }
 
         public async Task<IEnumerable<SystemLog>> GetRecentErrorsAsync(int count = 50, CancellationToken ct = default)
         {
-            return await _dbContext.systemLogs
+            return await _dbContext.SystemLogs
                             .AsNoTracking()
                             .Where(l => l.LogLevel >= LogLevel.Error)
                             .OrderByDescending(l => l.CreatedAt)

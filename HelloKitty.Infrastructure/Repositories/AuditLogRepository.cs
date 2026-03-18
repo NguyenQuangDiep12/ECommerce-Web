@@ -21,17 +21,17 @@ namespace HelloKitty.Infrastructure.Repositories
 
         public async Task AddAsync(AuditLog entity, CancellationToken ct = default)
         {
-            await _dbcontext.auditLogs.AddAsync(entity, ct);
+            await _dbcontext.AuditLogs.AddAsync(entity, ct);
         }
 
         public async Task AddRangeAsync(IEnumerable<AuditLog> entities, CancellationToken ct = default)
         {
-            await _dbcontext.auditLogs.AddRangeAsync(entities, ct);
+            await _dbcontext.AuditLogs.AddRangeAsync(entities, ct);
         }
 
         public async Task<IEnumerable<AuditLog>> GetByTableAsync(string tableName, string recordId, CancellationToken ct = default)
         {
-            return await _dbcontext.auditLogs
+            return await _dbcontext.AuditLogs
                             .AsNoTracking()
                             .Where(t => t.TableName == tableName && t.RecordId == recordId)
                             .OrderByDescending(l => l.CreatedAt)
@@ -40,7 +40,7 @@ namespace HelloKitty.Infrastructure.Repositories
 
         public async Task<IEnumerable<AuditLog>> GetByUserIdAsync(Guid userId, int page = 1, int pageSize = 10, CancellationToken ct = default)
         {
-            return await _dbcontext.auditLogs
+            return await _dbcontext.AuditLogs
                             .AsNoTracking()
                             .Where(t => t.UserId == userId)
                             .OrderByDescending(l => l.CreatedAt)

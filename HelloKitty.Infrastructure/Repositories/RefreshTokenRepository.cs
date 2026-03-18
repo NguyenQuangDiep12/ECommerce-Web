@@ -22,26 +22,26 @@ namespace HelloKitty.Infrastructure.Repositories
 
         public async Task AddAsync(RefreshToken entity, CancellationToken ct = default)
         {
-            await _dbContext.refreshTokens.AddAsync(entity, ct);
+            await _dbContext.RefreshTokens.AddAsync(entity, ct);
         }
 
         [Obsolete("Method is deprecated")]
         public async Task<bool> ExistsAsync(Expression<Func<RefreshToken, bool>> predicate, CancellationToken ct = default)
         {
-            return await _dbContext.refreshTokens.AnyAsync(predicate, ct);
+            return await _dbContext.RefreshTokens.AnyAsync(predicate, ct);
         }
 
         [Obsolete("Method is deprecated")]
         public async Task<IReadOnlyList<RefreshToken>> FindAsync(Expression<Func<RefreshToken, bool>> predicate, CancellationToken ct = default)
         {
-            return await _dbContext.refreshTokens
+            return await _dbContext.RefreshTokens
                 .Where(predicate)
                 .ToListAsync(ct);
         }
 
         public async Task<RefreshToken?> FirstOrDefaultAsync(Expression<Func<RefreshToken, bool>> predicate, CancellationToken ct = default)
         {
-            return await _dbContext.refreshTokens
+            return await _dbContext.RefreshTokens
                             .Where(predicate)
                             .FirstOrDefaultAsync(ct);
              
@@ -49,7 +49,7 @@ namespace HelloKitty.Infrastructure.Repositories
 
         public async Task<RefreshToken?> GetActiveTokenAsync(string token, CancellationToken ct = default)
         {
-            return await _dbContext.refreshTokens
+            return await _dbContext.RefreshTokens
                             .FirstOrDefaultAsync(t => t.Token == token && !t.IsRevoked, ct);
         }
 
@@ -61,13 +61,13 @@ namespace HelloKitty.Infrastructure.Repositories
 
         public async Task<RefreshToken?> GetByIdAsync(Guid id, CancellationToken ct = default)
         {
-            return await _dbContext.refreshTokens
+            return await _dbContext.RefreshTokens
                 .FirstOrDefaultAsync(x => x.TokenId == id, ct);
         }
 
         public async Task<PagedResult<RefreshToken>> GetPagedAsync(int page, int pageSize, CancellationToken ct = default)
         {
-            var query = _dbContext.refreshTokens.AsNoTracking();
+            var query = _dbContext.RefreshTokens.AsNoTracking();
 
             var totalCount = await query.CountAsync(ct);
 
@@ -89,12 +89,12 @@ namespace HelloKitty.Infrastructure.Repositories
         [Obsolete("Method is deprecated")]
         public void Remove(RefreshToken entity)
         {
-            _dbContext.refreshTokens.Remove(entity);
+            _dbContext.RefreshTokens.Remove(entity);
         }
 
         public async Task RevokeAllUserTokensAsync(Guid userId, CancellationToken ct = default)
         {
-            var tokens = await _dbContext.refreshTokens
+            var tokens = await _dbContext.RefreshTokens
                 .Where(t => t.UserId == userId && !t.IsRevoked)
                 .ToListAsync(ct);
 
@@ -104,12 +104,12 @@ namespace HelloKitty.Infrastructure.Repositories
                 token.RevokedAt = DateTime.UtcNow;
             }
 
-            _dbContext.refreshTokens.UpdateRange(tokens);
+            _dbContext.RefreshTokens.UpdateRange(tokens);
         }
 
         public void Update(RefreshToken entity)
         {
-            _dbContext.refreshTokens.Update(entity);
+            _dbContext.RefreshTokens.Update(entity);
         }
     }
 }

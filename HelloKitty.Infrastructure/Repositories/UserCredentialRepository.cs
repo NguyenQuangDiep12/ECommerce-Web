@@ -21,19 +21,19 @@ namespace HelloKitty.Infrastructure.Repositories
         }
         public async Task AddAsync(UserCredential entity, CancellationToken ct = default)
         {
-            await _dbContext.userCredentials.AddAsync(entity, ct);
+            await _dbContext.UserCredentials.AddAsync(entity, ct);
         }
 
         public Task<bool> ExistsAsync(Expression<Func<UserCredential, bool>> predicate, CancellationToken ct = default)
         {
-            return _dbContext.userCredentials
+            return _dbContext.UserCredentials
                 .AsNoTracking()
                 .AnyAsync(predicate, ct);
         }
 
         public async Task<IReadOnlyList<UserCredential>> FindAsync(Expression<Func<UserCredential, bool>> predicate, CancellationToken ct = default)
         {
-            return await _dbContext.userCredentials
+            return await _dbContext.UserCredentials
                 .AsNoTracking()
                 .Where(predicate)
                 .ToListAsync(ct);
@@ -41,7 +41,7 @@ namespace HelloKitty.Infrastructure.Repositories
 
         public Task<UserCredential?> FirstOrDefaultAsync(Expression<Func<UserCredential, bool>> predicate, CancellationToken ct = default)
         {
-            return _dbContext.userCredentials
+            return _dbContext.UserCredentials
                 .AsNoTracking()
                 .FirstOrDefaultAsync(predicate, ct);
         }
@@ -54,19 +54,19 @@ namespace HelloKitty.Infrastructure.Repositories
 
         public async Task<UserCredential?> GetByIdAsync(Guid id, CancellationToken ct = default)
         {
-            return await _dbContext.userCredentials
+            return await _dbContext.UserCredentials
                 .FindAsync(new object[] { id }, ct);
         }
 
         public async Task<UserCredential?> GetByUserIdAsync(Guid userId, CancellationToken ct = default)
         {
-            return await _dbContext.userCredentials
+            return await _dbContext.UserCredentials
                 .FirstOrDefaultAsync(u => u.UserId == userId, ct);
         }
 
         public async Task<PagedResult<UserCredential>> GetPagedAsync(int page, int pageSize, CancellationToken ct = default)
         {
-            var query = _dbContext.userCredentials.AsNoTracking();
+            var query = _dbContext.UserCredentials.AsNoTracking();
 
             var totalCount = await query.CountAsync(ct);
 
@@ -86,12 +86,12 @@ namespace HelloKitty.Infrastructure.Repositories
 
         public void Remove(UserCredential entity)
         {
-            _dbContext.userCredentials.Remove(entity);
+            _dbContext.UserCredentials.Remove(entity);
         }
 
         public void Update(UserCredential entity)
         {
-            _dbContext.userCredentials.Update(entity);
+            _dbContext.UserCredentials.Update(entity);
         }
     }
 }
