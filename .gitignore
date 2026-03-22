@@ -24,3 +24,33 @@ packages/
 # Temporary files
 *.tmp
 *.temp
+
+# đã có sẵn trong .gitignore của bạn
+appsettings.Development.json
+
+# thêm vào nếu chưa có
+**/secrets.json
+```
+
+---
+
+## Vị trí lưu file secrets.json trên máy
+```
+Windows:
+%APPDATA%\Microsoft\UserSecrets\c91cad0e-096d-4aba-8484-d44b3c8dc3c3\secrets.json
+
+Mac/Linux:
+~/.microsoft/usersecrets/c91cad0e-096d-4aba-8484-d44b3c8dc3c3/secrets.json
+```
+
+---
+
+## Thứ tự ưu tiên config (quan trọng)
+```
+appsettings.json          ← thấp nhất
+    ↓ bị ghi đè bởi
+appsettings.Development.json
+    ↓ bị ghi đè bởi
+User Secrets              ← development only
+    ↓ bị ghi đè bởi
+Environment Variables     ← cao nhất, dùng cho production
