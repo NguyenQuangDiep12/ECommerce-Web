@@ -18,7 +18,6 @@ namespace HelloKitty.Domain.Logging.Entities
         public string? RequestMethod { get; set; }
         public string? IpAddress { get; set; }
         public Guid? UserId { get; set; } // user dang thuc hien request
-        public User User { get; set; } = null!;
 
         // thong tin bo sung dang json (correlation id , extra context, v.v..)
         public string? MetaData { get; set; }

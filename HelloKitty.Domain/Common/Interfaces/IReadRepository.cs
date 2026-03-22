@@ -13,6 +13,7 @@ namespace HelloKitty.Domain.Common.Interfaces
     public interface IReadRepository<TEntity,TKey> where TEntity : class
     {
         Task<TEntity?> GetByIdAsync(TKey id, CancellationToken ct = default);
+
         [Obsolete("Method is deprecated")]
         Task<IEnumerable<TEntity>> GetAllAsync(CancellationToken ct = default);
         Task<PagedResult<TEntity>> GetPagedAsync(int page, int pageSize, CancellationToken ct = default);

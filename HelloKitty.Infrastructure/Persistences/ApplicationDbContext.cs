@@ -6,6 +6,8 @@ using HelloKitty.Domain.Orders.Entities;
 using HelloKitty.Domain.Promotions.Entities;
 using HelloKitty.Domain.Users.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 using Attribute = HelloKitty.Domain.Catalog.Entities.Attribute;
 
@@ -13,8 +15,10 @@ namespace HelloKitty.Infrastructure.Persistences
 {
     public class ApplicationDbContext : DbContext 
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) 
+        private readonly IConfiguration _configuration;
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration configuration) : base(options) 
         {
+            _configuration = configuration;
         }
         // User
         public DbSet<User> Users { get; set; }
@@ -68,6 +72,13 @@ namespace HelloKitty.Infrastructure.Persistences
         {
             configurationBuilder.Properties<decimal>()
                 .HavePrecision(18, 2);
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            optionsBuilder.UseSqlServer(connectionString)
+                .LogTo(Console.WriteLine, LogLevel.Information);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

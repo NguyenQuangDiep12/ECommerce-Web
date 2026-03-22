@@ -216,6 +216,58 @@ namespace HelloKitty.Application.Features.Orders.Services
 
             return Result.Success();
         }
+        // For Admin's Permission
+        public async Task<Result<OrderDetailResponse>> GetByIdForAdminAsync(Guid orderId, CancellationToken ct = default)
+        {
+            var order = await _unitOfWork.Orders.GetByIdWithDetailsAsync(orderId, ct);
+
+            if (order == null)
+                return Result<OrderDetailResponse>.Failure("Order not found");
+
+            return Result<OrderDetailResponse>.Success(MapToDetailResponse(order));
+        }
+
+        public async Task<Result<PagedResult<OrderListResponse>>> GetAllOrdersAsync(int page, int pageSize, CancellationToken ct = default)
+        {
+            var paged = await _unitOfWork.Orders.GetAllPagedAsync(page, pageSize, ct);
+            return Result<PagedResult<OrderListResponse>>.Success(MapToListPaged(paged));
+        }
+
+        public async Task<Result<ShipmentDetailResponse>> CreateShipmentAsync(Guid orderId, CreateShipmentRequest request, CancellationToken ct = default)
+        {
+            var order = await _unitOfWork.Orders.GetByIdWithDetailsAsync(orderId, ct);
+
+            if (order == null)
+                return Result<ShipmentDetailResponse>.Failure("Order not found");
+
+            if (order.Shipment != null)
+                return Result<ShipmentDetailResponse>.Failure("A shipment already exists for this order");
+
+            if (order.OrderStatus != OrderStatus.Paid && order.OrderStatus != OrderStatus.Processing)
+                return Result<ShipmentDetailResponse>.Failure("Shipments can only be created for orders that have been paid");
+
+            var shipment = new Shipment
+            {
+                OrderId = orderId,
+                ShipmentProvider = request.ShipmentProvider,
+                TrackingCode = request.TrackingCode,
+                ShipmentStatus = ShipmentStatus.Pending
+            };
+
+            order.Shipment = shipment;
+            order.OrderStatus = OrderStatus.Shipped;
+
+            _unitOfWork.Orders.Update(order);
+            await _unitOfWork.SaveChangesAsync(ct);
+
+            return Result<ShipmentDetailResponse>.Success(new ShipmentDetailResponse
+            {
+                ShipmentId = shipment.ShipmentId,
+                ShipmentProvider = shipment.ShipmentProvider,
+                TrackingCode = shipment.TrackingCode,
+                ShipmentStatus = shipment.ShipmentStatus
+            });
+        }
 
         private async Task<Result<decimal>> ApplyVoucherAsync(
             string code, Guid userId, decimal totalAmount, CancellationToken ct)

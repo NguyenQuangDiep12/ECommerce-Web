@@ -39,47 +39,46 @@ namespace HelloKitty.Application.Features.Auth.Services
         }
         public async Task<Result<AuthResponse>> LoginAsync(LoginRequest request, CancellationToken ct = default)
         {
-            // Buoc 1: Validate Input
+            // Step 1: Validate Input
             var errors = await _validationService.ValidateAsync(request, ct);
-            if(errors.Count > 0)
+            if (errors.Count > 0)
             {
                 return Result<AuthResponse>.ValidationFailure(errors);
             }
 
-            // Buoc 2: Tim User , khong noi ro sai tai khoan hay sai mat khau
+            // Step 2: Find User (do not specify whether email or password is incorrect)
             var user = await _uow.Users.GetByEmailAsync(request.Email, ct);
-            if(user is null)
+            if (user is null)
             {
-                return Result<AuthResponse>.Failure("Email hoac mat khau khong dung");
+                return Result<AuthResponse>.Failure("Invalid email or password");
             }
 
-            // Buoc 3: Kiem tra trang thai cua tai khoan
-            if(user.Status is UserStatus.Banned)
+            // Step 3: Check account status
+            if (user.Status is UserStatus.Banned)
             {
-                return Result<AuthResponse>.Failure("Tai khoan cua nguoi dung khong con hieu luc");
+                return Result<AuthResponse>.Failure("User account is no longer active");
             }
 
-            if(user.Status is UserStatus.Suspended)
+            if (user.Status is UserStatus.Suspended)
             {
-                return Result<AuthResponse>.Failure("Tai khoan cua nguoi dung dang bi tam khoa");
+                return Result<AuthResponse>.Failure("User account is temporarily suspended");
             }
 
-            if(user.Status is UserStatus.Deleted)
+            if (user.Status is UserStatus.Deleted)
             {
-                return Result<AuthResponse>.Failure("Email khong xac thuc hoac password");
+                return Result<AuthResponse>.Failure("Invalid email or password");
             }
 
-            // Buoc 4: Kiem tra Credential
+            // Step 4: Check Credential
             var credential = await _uow.UserCredentials.GetByUserIdAsync(user.UserId, ct);
-            if(credential is null)
+            if (credential is null)
             {
-                return Result<AuthResponse>.Failure("Email hoac mat khau khong dung");
+                return Result<AuthResponse>.Failure("Invalid email or password");
             }
 
-            // Buoc 5: Kiem tra failed login (Brute-Force protection)
+            // Step 5: Brute-force protection (not implemented yet)
 
-
-            // Buoc 6: Verify Password
+            // Step 6: Verify Password
             bool isValid = _passwordHasher.Verify(request.Password, credential.PasswordHash);
 
             if (!isValid)
@@ -87,10 +86,10 @@ namespace HelloKitty.Application.Features.Auth.Services
                 credential.FailedLoginCount++;
                 _uow.UserCredentials.Update(credential);
                 await _uow.SaveChangesAsync();
-                return Result<AuthResponse>.Failure("Email hoac mat khau khong dung");
+                return Result<AuthResponse>.Failure("Invalid email or password");
             }
 
-            // Buoc 7: Reset failed count, cap nhat lai last login
+            // Step 7: Reset failed count and update last login
             credential.FailedLoginCount = 0;
             credential.LastLoginAt = DateTime.UtcNow;
             _uow.UserCredentials.Update(credential);
@@ -98,12 +97,11 @@ namespace HelloKitty.Application.Features.Auth.Services
 
             return await GenerateAuthResponseAsync(user, ct);
         }
-
         public async Task<Result> LogoutAsync(string refreshToken, CancellationToken ct = default)
         {
             var token = await _uow.RefreshTokens.GetActiveTokenAsync(refreshToken, ct);
 
-            if(token != null)
+            if (token != null)
             {
                 token.IsRevoked = true;
                 _uow.RefreshTokens.Update(token);
@@ -115,45 +113,46 @@ namespace HelloKitty.Application.Features.Auth.Services
 
         public async Task<Result<AuthResponse>> RefreshTokenAsync(string refreshToken, CancellationToken ct = default)
         {
-            // Buoc 1: Tim va kiem tra token
+            // Step 1: Find and validate token
             var token = await _uow.RefreshTokens.GetActiveTokenAsync(refreshToken, ct);
-            if(token is null || !token.IsActive)
+            if (token is null || !token.IsActive)
             {
-                return Result<AuthResponse>.Failure("Refresh token khong hop le hoac da het han");
+                return Result<AuthResponse>.Failure("Invalid or expired refresh token");
             }
 
-            // Buoc 2: Revoke token cu (token rotation - moi lan refresh tao token moi)
+            // Step 2: Revoke old token (token rotation)
             token.IsRevoked = true;
             _uow.RefreshTokens.Update(token);
             await _uow.SaveChangesAsync();
 
-            // Buoc 3: Tim user 
+            // Step 3: Find user
             var user = await _uow.Users.GetByIdWithRoleAsync(token.UserId, ct);
-            if(user is null)
+            if (user is null)
             {
-                return Result<AuthResponse>.Failure("Nguoi dung khong ton tai");
+                return Result<AuthResponse>.Failure("User not found");
             }
 
             return await GenerateAuthResponseAsync(user, ct);
         }
 
+
         public async Task<Result<AuthResponse>> RegisterAsync(RegisterRequest request, CancellationToken ct = default)
         {
-            // Buoc 1: Validate input
+            // Step 1: Validate input
             var errors = await _validationService.ValidateAsync(request, ct);
-            if(errors.Count > 0)
+            if (errors.Count > 0)
             {
                 return Result<AuthResponse>.ValidationFailure(errors);
             }
 
-            // Buoc 2: Kiem tra email ton tai
-            bool emailExits = await _uow.Users.EmailExistsAsync(request.Email, ct);
-            if (emailExits)
+            // Step 2: Check if email exists
+            bool emailExists = await _uow.Users.EmailExistsAsync(request.Email, ct);
+            if (emailExists)
             {
-                return Result<AuthResponse>.Failure("Email da duoc su dung");
+                return Result<AuthResponse>.Failure("Email is already in use");
             }
 
-            // Buoc 3: Tao User entity
+            // Step 3: Create User entity
             var user = new User
             {
                 FullName = request.FullName,
@@ -162,7 +161,7 @@ namespace HelloKitty.Application.Features.Auth.Services
                 Status = UserStatus.Active
             };
 
-            // Buoc 4: Tao UserCredential
+            // Step 4: Create UserCredential
             var credential = new UserCredential
             {
                 UserId = user.UserId,
@@ -173,15 +172,13 @@ namespace HelloKitty.Application.Features.Auth.Services
 
             user.UserCredential = credential;
 
-            // Buoc 5: Luu DB
+            // Step 5: Save to DB
             await _uow.Users.AddAsync(user);
             await _uow.SaveChangesAsync(ct);
 
-            // Buoc 6: Tao Token va tra ve 
+            // Step 6: Generate token and return
             return await GenerateAuthResponseAsync(user, ct);
-
         }
-
         private async Task<Result<AuthResponse>> GenerateAuthResponseAsync(User user, CancellationToken ct = default)
         {
             // lay user kem roles

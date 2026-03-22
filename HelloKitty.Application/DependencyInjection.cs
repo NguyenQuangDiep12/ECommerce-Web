@@ -3,12 +3,18 @@ using HelloKitty.Application.Common;
 using HelloKitty.Application.Common.Interfaces;
 using HelloKitty.Application.Features.Auth.Services;
 using HelloKitty.Application.Features.Auth.Validators;
+using HelloKitty.Application.Features.Carts.Services;
+using HelloKitty.Application.Features.Categories.Services;
+using HelloKitty.Application.Features.Inventories.Services;
+using HelloKitty.Application.Features.Orders.Services;
+using HelloKitty.Application.Features.Products.Services;
+using HelloKitty.Application.Features.Reports.Services;
+using HelloKitty.Application.Features.Reviews.Services;
+using HelloKitty.Application.Features.Roles.Services;
+using HelloKitty.Application.Features.Users.Services;
+using HelloKitty.Application.Features.Vouchers.Services;
+using HelloKitty.Domain.Users.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HelloKitty.Application
 {
@@ -16,14 +22,41 @@ namespace HelloKitty.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            // scan validators 
+            // FluentValidation — scan toàn bộ assembly
             services.AddValidatorsFromAssembly(typeof(RegisterRequestValidator).Assembly);
 
-            // validation service
+            // Validation service
             services.AddScoped<IValidationService, ValidationService>();
 
-            // Application service
+            // Auth
             services.AddScoped<IAuthService, AuthService>();
+
+            // Users
+            services.AddScoped<IUserService, UserService>();
+
+            // Catalog
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IReviewService, ReviewService>();
+
+            // Cart
+            services.AddScoped<ICartService, CartService>();
+
+            // Orders
+            services.AddScoped<IOrderService, OrderService>();
+
+            // Promotions
+            services.AddScoped<IVoucherService, VoucherService>();
+
+            // Inventory
+            services.AddScoped<IInventoryService, InventoryService>();
+
+            // Admin
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IReportService, ReportService>();
+
+            // Application/DependencyInjection.cs
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
 
             return services;
         }

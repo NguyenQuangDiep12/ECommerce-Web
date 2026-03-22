@@ -1,6 +1,7 @@
 ﻿using HelloKitty.Application.Common;
 using HelloKitty.Application.Common.Interfaces;
 using HelloKitty.Application.Features.Vouchers.DTOs;
+using HelloKitty.Domain.Promotions.Entities;
 using HelloKitty.Domain.Common.Interfaces;
 using HelloKitty.Domain.Promotions.Enums;
 using System;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HelloKitty.Domain.Promotions;
 
 namespace HelloKitty.Application.Features.Vouchers.Services
 {

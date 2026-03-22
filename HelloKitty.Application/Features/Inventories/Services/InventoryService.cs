@@ -56,7 +56,7 @@ namespace HelloKitty.Application.Features.Inventories.Services
                 CurrentStock = variant.Quantity,
             }, ct);
 
-            await _unitOfWork.Products.Update(product!);
+            _unitOfWork.Products.Update(product!);
             await _unitOfWork.SaveChangesAsync(ct);
 
             return Result.Success();

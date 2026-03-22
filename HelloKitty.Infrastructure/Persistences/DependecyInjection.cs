@@ -8,17 +8,12 @@ using HelloKitty.Domain.Promotions.Interfaces;
 using HelloKitty.Domain.Users.Interfaces;
 using HelloKitty.Infrastructure.Repositories;
 using HelloKitty.Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace HelloKitty.Infrastructure.Persistences
 {
@@ -26,20 +21,22 @@ namespace HelloKitty.Infrastructure.Persistences
     {
         public static IServiceCollection AddInfrastructure(
             this IServiceCollection services,
-            IConfiguration configurations
-            )
+            IConfiguration configuration)
         {
+            // DbContext
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                        configurations.GetConnectionString("TMDT"), // use user-secrets key connectionstrings
-                        b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
+                    configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
                 )
             );
 
-            // repositories 
+            // Repositories
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserCredentialRepository, UserCredentialRepository>();
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+            services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IUserRoleRepository, UserRoleRepository>();
             services.AddScoped<IAuditLogRepository, AuditLogRepository>();
             services.AddScoped<ISystemLogRepository, SystemLogRepository>();
             services.AddScoped<IInventoryLogRepository, InventoryLogRepository>();
@@ -50,14 +47,14 @@ namespace HelloKitty.Infrastructure.Persistences
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IVoucherRepository, VoucherRepository>();
 
-            // unit of work
+            // Unit of Work
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            // infrastructure services
+            // Infrastructure services
             services.AddScoped<ITokenService, JwtTokenService>();
             services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
 
-            // Jwt Authentication
+            // JWT Authentication
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -67,10 +64,10 @@ namespace HelloKitty.Infrastructure.Persistences
                         ValidateAudience = true,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        ValidIssuer = configurations["Jwt:Issuer"],
-                        ValidAudience = configurations["Jwt:Audience"],
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidAudience = configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(configurations["Jwt:SecretKey"]!)),
+                            Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"]!)),
                         ClockSkew = TimeSpan.Zero
                     };
                 });
