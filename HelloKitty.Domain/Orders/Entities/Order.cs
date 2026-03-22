@@ -18,7 +18,7 @@ namespace HelloKitty.Domain.Orders.Entities
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
         public OrderAddress Address { get; set; } = null!;
         public List<Payment> Payments { get; set; } = new List<Payment>();
-        public Guid ShipmentId { get; set; }
+        public Guid ShipmentId { get; set; } 
         public Shipment? Shipment { get; set; } = null!;
     }
 }
