@@ -37,9 +37,9 @@ namespace HelloKitty.Infrastructure.Persistences.Configurations.Users
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasData(
-                new Role { RoleName = "Admin", Description = "Quản trị viên hệ thống" },
-                new Role { RoleName = "Customer", Description = "Khách hàng" },
-                new Role { RoleName = "Staff", Description = "Nhân viên" }
+                new { RoleId = Guid.Parse("0dff216c-8752-4227-abb8-48b9fcbfc940"), RoleName = "Admin", Description = "Quản trị viên hệ thống" , IsActive = true },
+                new { RoleId = Guid.Parse("7619f710-4bc3-488f-98bf-ca57cb62dcf7"), RoleName = "Customer", Description = "Khách hàng", IsActive = true },
+                new { RoleId = Guid.Parse("f01ea7d1-c055-4739-afb1-6af3c592f607"), RoleName = "Staff", Description = "Nhân viên", IsActive = true }
             );
         }
     }

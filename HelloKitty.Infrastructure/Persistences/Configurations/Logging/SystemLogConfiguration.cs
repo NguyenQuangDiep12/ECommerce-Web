@@ -34,11 +34,6 @@ namespace HelloKitty.Infrastructure.Persistences.Configurations.Logging
                 .HasColumnType("nvarchar(max)");
             builder.Property(l => l.CreatedAt)
                 .HasDefaultValueSql("GETUTCDATE()");
-
-            builder.HasOne(l => l.User)
-                .WithMany()
-                .HasForeignKey(l => l.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
