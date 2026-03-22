@@ -8,6 +8,7 @@ namespace HelloKitty.Application.Features.Roles.Services
     public class RoleService : IRoleService
     {
         private readonly IUnitOfWork _unitOfWork;
+
         public RoleService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -34,7 +35,7 @@ namespace HelloKitty.Application.Features.Roles.Services
         {
             var user = await _unitOfWork.Users.GetByIdWithRoleAsync(userId, ct);
             if (user is null)
-                return Result<UserRoleResponse>.Failure("Người dùng không tồn tại");
+                return Result<UserRoleResponse>.Failure("User not found");
 
             var roles = user.UserRoles?
                 .Select(ur => new RoleResponse
@@ -57,16 +58,16 @@ namespace HelloKitty.Application.Features.Roles.Services
         {
             var user = await _unitOfWork.Users.GetByIdWithRoleAsync(userId, ct);
             if (user is null)
-                return Result.Failure("Người dùng không tồn tại");
+                return Result.Failure("User not found");
 
             var role = await _unitOfWork.Roles.GetByIdAsync(request.RoleId, ct);
             if (role is null)
-                return Result.Failure("Role không tồn tại");
+                return Result.Failure("Role not found");
 
-            // Kiểm tra đã có role này chưa
+            // Check if user already has this role
             bool alreadyHasRole = user.UserRoles?.Any(ur => ur.RoleId == request.RoleId) ?? false;
             if (alreadyHasRole)
-                return Result.Failure("Người dùng đã có role này");
+                return Result.Failure("User already has this role");
 
             var userRole = new UserRole
             {
@@ -84,11 +85,11 @@ namespace HelloKitty.Application.Features.Roles.Services
         {
             var user = await _unitOfWork.Users.GetByIdWithRoleAsync(userId, ct);
             if (user is null)
-                return Result.Failure("Người dùng không tồn tại");
+                return Result.Failure("User not found");
 
             var userRole = user.UserRoles?.FirstOrDefault(ur => ur.RoleId == roleId);
             if (userRole is null)
-                return Result.Failure("Người dùng không có role này");
+                return Result.Failure("User does not have this role");
 
             _unitOfWork.UserRoles.Remove(userRole);
             await _unitOfWork.SaveChangesAsync(ct);

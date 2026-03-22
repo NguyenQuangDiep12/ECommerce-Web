@@ -16,5 +16,10 @@ namespace HelloKitty.Application.Features.Orders.Services
         Task<Result<PagedResult<OrderListResponse>>> GetUserOrdersAsync(Guid userId, int page, int pageSize, CancellationToken ct = default);
         Task<Result> CancelOrderAsync(Guid orderId, Guid userId, CancellationToken ct = default);
         Task<Result> UpdateStatusAsync(Guid orderId , UpdateOrderStatusRequest statusRequest, CancellationToken ct = default);
+
+
+        Task<Result<OrderDetailResponse>> GetByIdForAdminAsync(Guid orderId, CancellationToken ct = default);
+        Task<Result<PagedResult<OrderListResponse>>> GetAllOrdersAsync(int page, int pageSize, CancellationToken ct = default);
+        Task<Result<ShipmentDetailResponse>> CreateShipmentAsync(Guid orderId, CreateShipmentRequest request, CancellationToken ct = default);
     }
 }

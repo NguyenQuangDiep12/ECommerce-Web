@@ -57,25 +57,15 @@ namespace HelloKitty.Application.Features.Users.Services
             return Result<IReadOnlyList<AddressResponse>>.Success(addresses);
         }
 
-        public async Task<Result<UserProfileResponse>> UpdateAvatarAsync(
-            Guid userId,
-            Stream fileStream,
-            string fileName,
-            string contentType,
-            long length,
-            CancellationToken ct = default)
+        public async Task<Result<UserProfileResponse>> UpdateAvatarAsync(Guid userId, 
+            Stream fileStream, string fileName, string contentType, long length, CancellationToken ct = default)
         {
             var user = await unitOfWork.Users.GetByIdAsync(userId, ct);
 
             if (user is null)
                 return Result<UserProfileResponse>.Failure("User not found");
 
-            var imageUrl = await cloudinaryService.UploadAsync(
-                fileStream,
-                fileName,
-                $"avatars/{userId}",
-                ct
-            );
+            var imageUrl = await cloudinaryService.UploadAsync(fileStream, fileName, $"avatars/{userId}", contentType, ct);
 
             user.AvatarUrl = imageUrl;
             user.UpdatedAt = DateTime.UtcNow;

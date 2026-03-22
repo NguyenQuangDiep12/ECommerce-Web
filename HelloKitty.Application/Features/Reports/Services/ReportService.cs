@@ -15,7 +15,6 @@ namespace HelloKitty.Application.Features.Reports.Services
         public async Task<Result<RevenueReportResponse>> GetRevenueAsync(
             DateTime from, DateTime to, CancellationToken ct = default)
         {
-            // Lấy tất cả đơn hàng Complete trong khoảng thời gian
             var paged = await _unitOfWork.Orders.GetAllPagedAsync(1, int.MaxValue, ct);
 
             var completedOrders = paged.Items
@@ -27,7 +26,6 @@ namespace HelloKitty.Application.Features.Reports.Services
             var totalRevenue = completedOrders.Sum(o => o.FinalAmount);
             var totalOrders = completedOrders.Count;
 
-            // Group theo ngày
             var byDate = completedOrders
                 .GroupBy(o => o.CreatedAt.Date)
                 .OrderBy(g => g.Key)

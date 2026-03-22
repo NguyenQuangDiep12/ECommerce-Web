@@ -13,7 +13,8 @@ namespace HelloKitty.Application.Features.Users.Services
     {
         Task<Result<UserProfileResponse>> GetByIdAsync(Guid userId, CancellationToken ct = default);
         Task<Result<UserProfileResponse>> UpdateAsync(Guid userId, UpdateUserRequest request, CancellationToken ct = default);
-        Task<Result<UserProfileResponse>> UpdateAvatarAsync(Guid userId, Stream fileStream, string fileName, string contentType, long length, CancellationToken ct = default);
+        Task<Result<UserProfileResponse>> UpdateAvatarAsync(
+            Guid userId, Stream fileStream, string fileName, string contentType, long length, CancellationToken ct = default);
         Task<Result<IReadOnlyList<AddressResponse>>> GetAddressesAsync(Guid userId, CancellationToken ct = default);
         Task<Result<AddressResponse>> AddAddressAsync(Guid userId, CreateAddressRequest request, CancellationToken ct = default);
         Task<Result<AddressResponse>> UpdateAddressAsync(Guid userId, int addressId, UpdateAddressRequest request, CancellationToken ct = default);
