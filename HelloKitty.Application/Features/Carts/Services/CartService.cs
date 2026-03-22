@@ -32,6 +32,21 @@ namespace HelloKitty.Application.Features.Carts.Services
                 return Result<CartResponse>.ValidationFailure(errors);
             }
 
+            // kiem tra variant co ton tai va con hang khong
+            var product = await _unitOfWork.Products.GetByIdWithDetailsAsync(request.VarianId, ct);
+
+            var variant = product?.ProductVariants.FirstOrDefault(v => v.VariantId == request.VarianId);
+
+            if(variant == null || !variant.IsActive)
+            {
+                return Result<CartResponse>.Failure("This product is no longer available or has been discontinued");
+            }
+
+            if(variant.Quantity < request.Quantity)
+            {
+                return Result<CartResponse>.Failure("Insufficient stock");
+            }
+
             var cart = await GetOrCreateCartAsync(userId, ct);
             var existing = cart.CartItems.FirstOrDefault(i => i.VariantId == request.VarianId);
 
@@ -108,26 +123,60 @@ namespace HelloKitty.Application.Features.Carts.Services
             return Result<CartResponse>.Success(MapToResponse(updated!));
         }
 
-        public Task<Result<CartResponse>> UpdateItemAsync(Guid userId, Guid cartItemId, UpdateCartItemRequest request, CancellationToken ct = default)
+        public async Task<Result<CartResponse>> UpdateItemAsync(Guid userId, Guid cartItemId, UpdateCartItemRequest request, CancellationToken ct = default)
         {
-            throw new NotImplementedException();
+            var errors = await _validationService.ValidateAsync(request, ct);
+            if(errors.Count > 0)
+            {
+                return Result<CartResponse>.ValidationFailure(errors);
+            }
+
+            var cart = await _unitOfWork.Carts.GetByUserIdAsync(userId, ct);
+            if(cart == null)
+            {
+                return Result<CartResponse>.Failure("Cart not exists");
+            }
+
+            var item = cart.CartItems.FirstOrDefault(i => i.CartItemId == cartItemId);
+            if(item == null)
+            {
+                return Result<CartResponse>.Failure("The product is not in the shopping cart");
+            }
+
+            // kiem tra hang ton kho
+            var product = await _unitOfWork.Products.GetByIdWithDetailsAsync(item.VariantId, ct);
+
+            var variant = product?.ProductVariants.FirstOrDefault(v => v.VariantId == item.VariantId);
+
+            if(variant == null || !variant.IsActive)
+            {
+                return Result<CartResponse>.Failure("The product not exists or no longer being sold");
+            }
+
+            if(variant.Quantity < request.Quantity)
+            {
+                return Result<CartResponse>.Failure($"Only {variant.Quantity} left in stocks");
+            }
+
+            item.Quantity = request.Quantity;
+            item.PriceAtTime = variant.Price;
+            cart.UpdatedAt = DateTime.UtcNow;
+
+            _unitOfWork.Carts.Update(cart);
+            await _unitOfWork.SaveChangesAsync(ct);
+
+            var updated = await _unitOfWork.Carts.GetByUserIdAsync(userId, ct);
+            return Result<CartResponse>.Success(MapToResponse(updated!));
         }
 
         private async Task<Cart> GetOrCreateCartAsync(Guid userId, CancellationToken ct)
         {
             var cart = await _unitOfWork.Carts.GetByUserIdAsync(userId, ct);
+            if (cart != null) return cart;
 
-            if (cart == null)
-            {
-                cart = new Domain.Carts.Entities.Cart
-                {
-                    UserId = userId,
-                    UpdatedAt = DateTime.UtcNow,
-                };
-                await _unitOfWork.Carts.AddAsync(cart, ct);
-                await _unitOfWork.SaveChangesAsync(ct);
-            }
-
+            cart = new Cart { UserId = userId, UpdatedAt = DateTime.UtcNow };
+            await _unitOfWork.Carts.AddAsync(cart, ct);
+            await _unitOfWork.SaveChangesAsync(ct);
             return cart;
         }
 
