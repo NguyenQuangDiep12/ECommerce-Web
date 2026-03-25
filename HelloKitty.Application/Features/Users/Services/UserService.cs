@@ -3,14 +3,13 @@ using HelloKitty.Application.Common.Interfaces;
 using HelloKitty.Application.Features.Users.DTOs;
 using HelloKitty.Domain.Common.Interfaces;
 using HelloKitty.Domain.Users.Entities;
-using HelloKitty.Domain.Users.Interfaces;
 
 namespace HelloKitty.Application.Features.Users.Services
 {
     public class UserService(
         IUnitOfWork unitOfWork,
         IValidationService validationService,
-        ICloudinaryService cloudinaryService) : IUserService
+        IMediaStorageService cloudinaryService) : IUserService
     {
         public async Task<Result<UserProfileResponse>> GetByIdAsync(Guid userId, CancellationToken ct = default)
         {

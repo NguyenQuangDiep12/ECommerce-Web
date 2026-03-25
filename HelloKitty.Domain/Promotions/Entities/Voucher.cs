@@ -1,6 +1,6 @@
 ﻿using HelloKitty.Domain.Promotions.Enums;
 
-namespace HelloKitty.Domain.Promotions
+namespace HelloKitty.Domain.Promotions.Entities
 {
     public class Voucher
     {

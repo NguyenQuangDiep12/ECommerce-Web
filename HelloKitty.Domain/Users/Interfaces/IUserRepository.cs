@@ -13,5 +13,6 @@ namespace HelloKitty.Domain.Users.Interfaces
         Task<User?> GetByEmailAsync(string email, CancellationToken ct = default);
         Task<User?> GetByIdWithRoleAsync(Guid userId, CancellationToken ct = default);
         Task<bool> EmailExistsAsync(string email, CancellationToken ct = default);
+        Task<User?> GetByIdWithAddressesAsync(Guid userId, CancellationToken ct = default);
     }
 }

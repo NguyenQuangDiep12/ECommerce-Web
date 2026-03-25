@@ -44,12 +44,16 @@ namespace HelloKitty.API.Controllers
         }
 
         [HttpPost("{id:guid}/avatar")]
+        [Consumes("multipart/form-data")]
         public async Task<IActionResult> UploadAvatar(Guid id, IFormFile file, CancellationToken ct)
         {
-            if (id != CurrentUserId)
-                return Forbid();
+            if (file == null || file.Length == 0)
+                return BadRequest(new { message = "File is empty" });
 
-            var result = await _userService.UpdateAvatarAsync(id, file, ct);
+            using var stream = file.OpenReadStream();
+            
+
+            var result = await _userService.UpdateAvatarAsync(id, stream, Path.GetFileName(file.FileName), file.ContentType, file.Length, ct);
 
             if (result.IsSuccess)
                 return Ok(result.Value);

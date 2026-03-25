@@ -53,6 +53,7 @@ namespace HelloKitty.Infrastructure.Persistences
             // Infrastructure services
             services.AddScoped<ITokenService, JwtTokenService>();
             services.AddScoped<IPasswordHasher, BcryptPasswordHasher>();
+            services.AddScoped<IMediaStorageService, CloudinaryService>();
 
             // JWT Authentication
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

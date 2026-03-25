@@ -1,4 +1,5 @@
-﻿using HelloKitty.Domain.Promotions.Interfaces;
+﻿using HelloKitty.Domain.Promotions.Entities;
+using HelloKitty.Domain.Promotions.Interfaces;
 using HelloKitty.Infrastructure.Persistences;
 using Microsoft.EntityFrameworkCore;
 using System;
