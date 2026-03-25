@@ -1,5 +1,7 @@
-﻿using HelloKitty.API.Middleware;
+﻿
+using HelloKitty.API.Middleware;
 using HelloKitty.Application;
+using HelloKitty.Domain.Users.Interfaces;
 using HelloKitty.Infrastructure.Persistences;
 using Microsoft.OpenApi.Models;
 
@@ -34,7 +36,6 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
 // Application + Infrastructure DI
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);

@@ -1,4 +1,5 @@
 ﻿using HelloKitty.Domain.Common.Interfaces;
+using HelloKitty.Domain.Promotions.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

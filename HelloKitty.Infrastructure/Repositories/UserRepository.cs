@@ -76,6 +76,13 @@ namespace HelloKitty.Infrastructure.Repositories
             return await _dbContext.Users.FindAsync(new object[] { id }, ct);
         }
 
+        public async Task<User?> GetByIdWithAddressesAsync(Guid userId, CancellationToken ct = default)
+        {
+            return await _dbContext.Users
+                .Include(u => u.UserAddresses)
+                .FirstOrDefaultAsync(u => u.UserId == userId, ct);
+        }
+
         public async Task<User?> GetByIdWithRoleAsync(Guid userId, CancellationToken ct = default)
         {
             return await _dbContext.Users

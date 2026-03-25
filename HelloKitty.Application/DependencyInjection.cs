@@ -13,7 +13,7 @@ using HelloKitty.Application.Features.Reviews.Services;
 using HelloKitty.Application.Features.Roles.Services;
 using HelloKitty.Application.Features.Users.Services;
 using HelloKitty.Application.Features.Vouchers.Services;
-using HelloKitty.Domain.Users.Interfaces;
+using HelloKitty.Domain.Common.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace HelloKitty.Application
@@ -54,9 +54,6 @@ namespace HelloKitty.Application
             // Admin
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IReportService, ReportService>();
-
-            // Application/DependencyInjection.cs
-            services.AddScoped<ICloudinaryService, CloudinaryService>();
 
             return services;
         }
